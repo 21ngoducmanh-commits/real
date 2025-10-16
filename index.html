@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cookie Video Fullscreen</title>
+<style>
+  body {
+    margin: 0;
+    font-family: sans-serif;
+    background-color: #121212;
+    color: white;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Khung thông báo cookie */
+  .cookie-box {
+    background-color: #1e1e1e;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(255,255,255,0.2);
+    padding: 25px;
+    max-width: 90%;
+    width: 350px;
+    text-align: center;
+    animation: fadeIn 0.5s;
+  }
+
+  .cookie-box h2 {
+    margin-top: 0;
+  }
+
+  .cookie-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+  }
+
+  button {
+    background-color: #ff3b3b;
+    color: white;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.3s;
+  }
+
+  button:hover {
+    background-color: #ff6666;
+  }
+
+  button:active {
+    transform: scale(0.95);
+  }
+
+  /* Video toàn màn hình */
+  #videoFull {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    z-index: 9999;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+  }
+</style>
+</head>
+<body>
+
+  <div class="cookie-box" id="cookieBox">
+    <h2>Chúng tôi sử dụng cookie 🍪</h2>
+    <p>Trang web này dùng cookie để cải thiện trải nghiệm của bạn. Bạn có đồng ý không?</p>
+    <div class="cookie-buttons">
+      <button onclick="playVideo()">Đồng ý</button>
+      <button onclick="playVideo()">Không đồng ý</button>
+    </div>
+  </div>
+
+  <!-- Video phát fullscreen -->
+  <video id="videoFull" src="video.mp4" preload="auto"></video>
+
+  <script>
+    const video = document.getElementById("videoFull");
+    const box = document.getElementById("cookieBox");
+
+    function playVideo() {
+      // Ẩn hộp cookie
+      box.style.display = "none";
+      video.style.display = "block";
+
+      // Phát video
+      video.currentTime = 0;
+      video.play();
+
+      // Bật fullscreen nếu có thể
+      if (video.requestFullscreen) {
+        video.requestFullscreen();
+      } else if (video.webkitRequestFullscreen) {
+        video.webkitRequestFullscreen(); // iPhone / iPad
+      } else if (video.msRequestFullscreen) {
+        video.msRequestFullscreen();
+      }
+
+      // Khi video kết thúc → thoát fullscreen & ẩn video
+      video.onended = () => {
+        if (document.fullscreenElement) {
+          document.exitFullscreen();
+        }
+        video.style.display = "none";
+      };
+    }
+  </script>
+
+</body>
+</html>
